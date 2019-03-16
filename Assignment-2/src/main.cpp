@@ -81,6 +81,13 @@ vector<double> cgbase;
 #define DEBUG 0
 
 // Helper Functions
+int get_bcol() {
+    int count = 0;
+    for (int i = 0; i <= polyDegree; i++) {
+        count += (i*(i + 1) / 2 + i + 1);
+    }
+    return count;
+}
 bool double_eq(double e1, double e2){
     return fabs(e1 - e2) < 0.000001;
 }
@@ -261,7 +268,7 @@ void evaluateImplicitFunc() {
         cgbase);
 
     auto construct_b = [](Eigen::RowVector3d& point){
-        int B_col = 1 + polyDegree * (polyDegree + 1) * 3 / 2;
+        int B_col = get_bcol();
         Eigen::RowVectorXd b(B_col);
         for(int k = 0, col_id = 0; k <= polyDegree; k++){
             for(int x_p = 0; x_p <= k; x_p++){
@@ -320,7 +327,7 @@ void evaluateImplicitFunc() {
 
                 int num_radiu_points = radiu_points_v.size();
 
-                if(num_radiu_points < 3){
+                if(num_radiu_points < get_bcol()){
                     // There's no enough points with in h to this point
                     grid_values[index] = 1000.0;
                     continue;
@@ -331,7 +338,7 @@ void evaluateImplicitFunc() {
 
                 Eigen::MatrixXd B;
                 int B_row = num_radiu_points;
-                int B_col = 1 + polyDegree * (polyDegree + 1) * 3 / 2;
+                int B_col = get_bcol();
                 B.resize(B_row, B_col);
 
                 for(int i = 0; i < num_radiu_points; ++i){
@@ -381,7 +388,7 @@ void evaluateImplicitFuncOpt2() {
 
 
     auto construct_b = [](Eigen::RowVector3d& point){
-        int B_col = 1 + polyDegree * (polyDegree + 1) * 3 / 2;
+        int B_col = get_bcol();
         Eigen::RowVectorXd b(B_col);
         for(int k = 0, col_id = 0; k <= polyDegree; k++){
             for(int x_p = 0; x_p <= k; x_p++){
@@ -440,7 +447,7 @@ void evaluateImplicitFuncOpt2() {
 
                 int num_radiu_points = radiu_points_v.size();
 
-                if(num_radiu_points < 3){
+                if(num_radiu_points < get_bcol()){
                     // There's no enough points with in h to this point
                     grid_values[index] = 1000.0;
                     continue;
@@ -451,7 +458,7 @@ void evaluateImplicitFuncOpt2() {
 
                 Eigen::MatrixXd B;
                 int B_row = num_radiu_points;
-                int B_col = 1 + polyDegree * (polyDegree + 1) * 3 / 2;
+                int B_col = get_bcol();
                 B.resize(B_row, B_col);
 
                 for(int i = 0; i < num_radiu_points; ++i){
